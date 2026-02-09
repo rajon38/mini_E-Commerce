@@ -16,6 +16,11 @@ interface EnvConfig {
   REFRESH_TOKEN_EXPIRES_IN: string;
   BETTER_AUTH_SESSION_TOKEN_EXPIRES_IN: string;
   BETTER_AUTH_SESSION_TOKEN_UPDATE_AGE: string;
+  EMAIL_USER: string;
+  EMAIL_PASS: string;
+  GOOGLE_CLIENT_ID: string;
+  GOOGLE_CLIENT_SECRET: string;
+  APP_URL: string;
 }
 
 const loadEnvVariables = (): EnvConfig => {
@@ -31,7 +36,12 @@ const loadEnvVariables = (): EnvConfig => {
         'ACCESS_TOKEN_EXPIRES_IN',
         'REFRESH_TOKEN_EXPIRES_IN',
         'BETTER_AUTH_SESSION_TOKEN_EXPIRES_IN',
-        'BETTER_AUTH_SESSION_TOKEN_UPDATE_AGE'
+        'BETTER_AUTH_SESSION_TOKEN_UPDATE_AGE',
+        'EMAIL_USER',
+        'EMAIL_PASS',
+        'GOOGLE_CLIENT_ID',
+        'GOOGLE_CLIENT_SECRET',
+        'APP_URL'
     ];
     requiredEnvVars.forEach((variable) => {
         if (!process.env[variable]) {
@@ -50,6 +60,11 @@ const loadEnvVariables = (): EnvConfig => {
         REFRESH_TOKEN_EXPIRES_IN: process.env.REFRESH_TOKEN_EXPIRES_IN as string,
         BETTER_AUTH_SESSION_TOKEN_EXPIRES_IN: process.env.BETTER_AUTH_SESSION_TOKEN_EXPIRES_IN as string,
         BETTER_AUTH_SESSION_TOKEN_UPDATE_AGE: process.env.BETTER_AUTH_SESSION_TOKEN_UPDATE_AGE as string,
+        EMAIL_USER: process.env.EMAIL_USER as string,
+        EMAIL_PASS: process.env.EMAIL_PASS as string,
+        GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID as string,
+        GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET as string,
+        APP_URL: process.env.APP_URL as string,
     };
 }
 

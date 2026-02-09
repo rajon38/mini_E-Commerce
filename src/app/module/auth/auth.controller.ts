@@ -5,9 +5,9 @@ import { sendResponse } from "../../shared/sendResponse";
 import status from "http-status";
 import { tokenUtils } from "../../utils/token";
 
-const registerPatient = catchAsync(async (req: Request, res: Response) => {
+const registerUser = catchAsync(async (req: Request, res: Response) => {
     const payload = req.body;
-    const result = await AuthService.registerPatient(payload);
+    const result = await AuthService.registerUser(payload);
     const { accessToken, refreshToken, token, ...rest } = result;
 
     tokenUtils.setAccessTokenCookie(res, accessToken);
@@ -16,7 +16,7 @@ const registerPatient = catchAsync(async (req: Request, res: Response) => {
     sendResponse(res, {
         httpStatusCode: status.CREATED,
         success: true,
-        message: "Patient registered successfully",
+        message: "User registered successfully",
         data: {
             accessToken,
             refreshToken,
@@ -48,6 +48,6 @@ const login = catchAsync(async (req: Request, res: Response) => {
 });
 
 export const AuthController = {
-    registerPatient,
+    registerUser,
     login
 }

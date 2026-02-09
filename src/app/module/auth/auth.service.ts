@@ -6,7 +6,7 @@ import { prisma } from "../../lib/prisma";
 import { tokenUtils } from "../../utils/token";
 //import { prisma } from "../../lib/prisma";
 
-interface IRegisterPatientPayload {
+interface IRegisterUserPayload {
     name: string;
     email: string;
     password: string;
@@ -17,7 +17,7 @@ interface ILoginPayload {
     password: string;
 }
 
-const registerPatient = async (payload: IRegisterPatientPayload) => {
+const registerUser = async (payload: IRegisterUserPayload) => {
     const { name, email, password } = payload;
     const data = await auth.api.signUpEmail({
         body: {
@@ -31,16 +31,6 @@ const registerPatient = async (payload: IRegisterPatientPayload) => {
     }
 
     try {
-    const patient = await prisma.$transaction(async (tx) => {
-            const patientTx = await tx.patient.create({
-            data: {
-                userId: data.user!.id,
-                name: payload.name,
-                email: payload.email,
-            }
-        })
-        return patientTx;
-    });
     const accessToken = tokenUtils.getAccessToken({
         userId: data.user.id,
         role: data.user.role,
@@ -63,8 +53,7 @@ const registerPatient = async (payload: IRegisterPatientPayload) => {
         return {
         ...data,
         accessToken,
-        refreshToken,
-        patient
+        refreshToken
     };
     } catch (error) {
         console.log("Error creating patient record:", error);
@@ -121,6 +110,6 @@ const login = async (payload: ILoginPayload) => {
 }
 
 export const AuthService = {
-    registerPatient,
+    registerUser,
     login
 }
