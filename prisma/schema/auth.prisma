@@ -14,6 +14,8 @@ model User {
   updatedAt     DateTime  @updatedAt
   sessions      Session[]
   accounts      Account[]
+  orders        Orders[]
+  cart          Cart[]
 
   @@unique([email])
   @@map("user")

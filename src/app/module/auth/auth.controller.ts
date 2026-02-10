@@ -47,7 +47,47 @@ const login = catchAsync(async (req: Request, res: Response) => {
     });
 });
 
+const getProfile = catchAsync(async (req: Request, res: Response) => {
+    const userId = req.user?.userId;
+
+    const freshUser = await AuthService.getProfile(userId as string);
+    sendResponse(res, {
+        httpStatusCode: status.OK,
+        success: true,
+        message: "User profile retrieved successfully",
+        data: freshUser
+    });
+
+});
+
+const updateProfile = catchAsync(async (req: Request, res: Response) => {
+    const userId = req.user?.userId;
+    const payload = req.body;
+
+    const updatedUser = await AuthService.updateProfile(userId as string, payload);
+    sendResponse(res, {
+        httpStatusCode: status.OK,
+        success: true,
+        message: "User profile updated successfully",
+        data: updatedUser
+    });
+});
+
+const deleteUser = catchAsync(async (req: Request, res: Response) => {
+    const userId = req.params.id;
+    await AuthService.deleteUser(userId as string);
+    sendResponse(res, {
+        httpStatusCode: status.OK,
+        success: true,
+        message: "User deleted successfully",
+        data: null
+    });
+});
+
 export const AuthController = {
     registerUser,
-    login
+    login,
+    getProfile,
+    updateProfile,
+    deleteUser
 }

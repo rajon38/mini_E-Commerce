@@ -72,6 +72,15 @@ export const checkAuth = (...allowedRoles: Role[]) => async (req: Request, res: 
             throw new AppError(status.UNAUTHORIZED, "Unauthorized: Invalid access token");
         }
 
+        req.user= {
+            userId: verifiedToken.data!.userId,
+            email: verifiedToken.data!.email,
+            name: verifiedToken.data!.name,
+            role: verifiedToken.data!.role,
+            emailVerified: verifiedToken.data!.emailVerified,
+            // add other fields if needed
+        };
+
         if (allowedRoles.length > 0 && !allowedRoles.includes(verifiedToken.data!.role as Role)) {
             throw new AppError(status.FORBIDDEN, "Forbidden: User does not have the required role");
         }

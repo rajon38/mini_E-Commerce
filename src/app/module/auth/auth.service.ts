@@ -11,6 +11,11 @@ interface IRegisterUserPayload {
     email: string;
     password: string;
 }
+interface IUpdateUserPayload {
+    name?: string;
+    password?: string;
+    image?: string;
+}
 
 interface ILoginPayload {
     email: string;
@@ -109,7 +114,79 @@ const login = async (payload: ILoginPayload) => {
     };
 }
 
+const getProfile = async (userId: string) => {
+    const user = await prisma.user.findUnique({
+        where: {
+            id: userId
+        },
+        select: {
+            id: true,
+            name: true,
+            email: true,
+            role: true,
+            status: true,
+            emailVerified: true,
+            createdAt: true,
+            updatedAt: true
+        }
+    });
+    if (!user) {
+        throw new AppError(status.NOT_FOUND, "User not found");
+    }
+    return user;
+}
+
+const updateProfile = async (userId: string, payload: IUpdateUserPayload) => {
+    const updatedUser = await prisma.user.update({
+        where: {
+            id: userId
+        },
+        data: payload,
+        select: {
+            id: true,
+            name: true,
+            email: true,
+            role: true,
+            status: true,
+            emailVerified: true,
+            createdAt: true,
+            updatedAt: true
+        }
+    });
+    return updatedUser;
+}
+
+//soft delete
+const deleteUser = async (userId: string) => {
+    const existingUser = await prisma.user.findUnique({
+        where: {
+            id: userId
+        }
+    });
+    if (!existingUser) {
+        throw new AppError(status.NOT_FOUND, "User not found");
+    }
+    await prisma.user.update({
+        where: {
+            id: existingUser.id
+        },
+        data: {
+            isDeleted: true,
+            deletedAt: new Date(),
+            status: UserStatus.DELETED
+        }
+    });
+
+    return {
+        message: "User deleted successfully"
+    };
+}
+
+
 export const AuthService = {
     registerUser,
-    login
+    login,
+    getProfile,
+    updateProfile,
+    deleteUser
 }
