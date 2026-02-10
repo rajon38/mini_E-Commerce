@@ -3,7 +3,7 @@ import { catchAsync } from "../../shared/catchAsync";
 import { sendResponse } from "../../shared/sendResponse";
 import { ProductService } from "./product.service";
 import { Request, Response } from "express";
-import paginationSortingHelper from "../../../helpers/paginationSortingHelper";
+import paginationSortingHelper from "../../helpers/paginationSortingHelper";
 
 const createProduct = catchAsync(async (req: Request, res: Response) => {
     const result = await ProductService.createProduct(req.body);

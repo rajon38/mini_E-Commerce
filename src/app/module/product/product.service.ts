@@ -21,10 +21,11 @@ const getAllProducts = async ({search, page, limit, skip, sortBy, sortOrder}:
     if (search) {
         andConditions.push({
             OR: [
-                { name: { contains: search, mode: "insensitive" }, isDeleted: false },
+                { name: { contains: search, mode: "insensitive" }},
             ]
         });
     }
+    andConditions.push({ isDeleted: false });
 
     const products = await prisma.product.findMany({
         take: limit,
@@ -56,6 +57,19 @@ const getOneProduct = async (productId: string) => {
     const product = await prisma.product.findUnique({
         where: {
             id: productId
+        }
+    });
+    if (!product) {
+        throw new Error("Product not found");
+    }
+    await prisma.product.update({
+        where: {
+            id: productId
+        },
+        data: {
+            views: {
+                increment: 1
+            }
         }
     });
     return product;
