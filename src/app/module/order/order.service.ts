@@ -25,7 +25,14 @@ const createOrder = async (userId: string,payload: IOrderCreatePayload)=> {
             }
         });
         if (products.length !== payload.orderItems.length) {
-            throw new Error("One or more products not found");
+            throw new Error("One or more products not found or insufficient stock");
+        }
+        const productById = new Map(products.map(p => [p.id, p]));
+        for (const item of payload.orderItems) {
+            const product = productById.get(item.productId);
+            if (!product || product.stock < item.quantity) {
+                throw new Error("One or more products not found or insufficient stock");
+            }
         }
         const order = await prisma.orders.create({
             data: {
@@ -43,6 +50,18 @@ const createOrder = async (userId: string,payload: IOrderCreatePayload)=> {
             },
             include: {
                 orderItems: true
+            }
+        });
+        await prisma.product.updateMany({
+            where: {
+                id: {
+                    in: payload.orderItems.map(item => item.productId)
+                }
+            },
+            data: {
+                stock: {
+                    decrement: payload.orderItems.reduce((acc, item) => acc + item.quantity, 0)
+                }
             }
         });
         return order;
