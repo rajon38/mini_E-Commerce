@@ -3,7 +3,8 @@ model Orders {
   userId      String
   user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   totalAmount Float    @default(0)
-  status      String   @default("PENDING")
+  status      OrderStatus @default(PENDING)
+  paymentMethod PaymentMethod @default(COD)
   isDeleted   Boolean  @default(false)
   deletedAt   DateTime?
   createdAt   DateTime @default(now())
