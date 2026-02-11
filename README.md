@@ -51,12 +51,14 @@ npm run dev
 
 Visit `http://localhost:8020` in your browser for local server.
 
+ADMIN:
+email: "admin@gmail.com",
+password: "admin123"
+
 **Live URL:** https://mini-e-commerce-two-xi.vercel.app/
 
 **Github Repo:** https://github.com/rajon38/mini_E-Commerce.git
 
 **PostMan URL:** https://documenter.getpostman.com/view/24585156/2sBXcAKita
 
-ADMIN:
-email: "admin@gmail.com",
-password: "admin123"
+**ER Diagram URL:** https://dbdiagram.io/d/mini-e-commerce-69889a94bd82f5fce204f918
